@@ -5,6 +5,7 @@ namespace Kasssh\Payment;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\RequestOptions;
 use Kasssh\Payment\Exceptions\HttpMethodNotSupported;
 use Kasssh\Payment\Exceptions\InvalidApiResponse;
 use Kasssh\Payment\Exceptions\InvalidConfig;
@@ -43,21 +44,20 @@ class KassshClient
         ]);
     }
 
-    public function request(string $method, string $url, ?array $parameters = [])
+    public function request(string $method, string $url, array $data = [], array $options = [])
     {
         if (!in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
             throw new HttpMethodNotSupported("$method not supported");
         }
 
-        $parameters = array_merge([
-            'key' => $this->key,
-            'store_id' => $this->storeId,
-        ], $parameters);
+        $data['key'] = $this->key;
+        $data['store_id'] = $this->storeId;
+        $options[RequestOptions::FORM_PARAMS] = $data;
 
-        try{
-            $response = $this->client->request($method, $url, $parameters);
-        } catch(ClientException $e) {
-            throw new InvalidApiResponse($e->getMessage(),$e->getRequest(), $e->getResponse());
+        try {
+            $response = $this->client->request($method, $url,  $options);
+        } catch (ClientException $e) {
+            throw new InvalidApiResponse($e->getMessage(), $e->getRequest(), $e->getResponse());
         }
 
         return json_decode($response->getBody()->getContents(), true);
@@ -68,6 +68,7 @@ class KassshClient
         return [
             'X-Store-Key' =>  $this->key,
             'X-Store-Id' =>  $this->storeId,
+            'Accept' => 'application/json',
         ];
     }
 
@@ -88,7 +89,6 @@ class KassshClient
         }
 
         return new static::$availableResources[$resource](self::$instance);
-
     }
 
     public static function __callStatic(string $name, array $arguments)
@@ -104,5 +104,4 @@ class KassshClient
     {
         return $this->storeId;
     }
-
 }
