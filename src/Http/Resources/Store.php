@@ -12,7 +12,7 @@ class Store extends Resource
 
     public function setWebhook($webhookUrl)
     {
-        return $this->client->request('patch', '/api/charge/delete', [
+        return $this->client->request('patch', '/api/store/webhook', [
             'webhook_url' => $webhookUrl,
         ]);
     }
