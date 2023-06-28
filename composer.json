@@ -1,0 +1,20 @@
+{
+    "name": "kasssh/kasssh-payment",
+    "type": "library",
+    "license": "properitory",
+    "autoload": {
+        "psr-4": {
+            "Kasssh\\Payment\\": "src/"
+        }
+    },
+    "authors": [
+        {
+            "name": "Kishan",
+            "email": "kishan@kasssh.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^7.0",
+        "php": ">=7.2"
+    }
+}
