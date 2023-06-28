@@ -4,6 +4,7 @@ namespace Kasssh\Payment;
 
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Kasssh\Payment\Exceptions\HttpMethodNotSupported;
 use Kasssh\Payment\Exceptions\InvalidApiResponse;
 use Kasssh\Payment\Exceptions\InvalidConfig;
@@ -53,10 +54,10 @@ class KassshClient
             'store_id' => $this->storeId,
         ], $parameters);
 
-        $response = $this->client->request($method, $url, $parameters);
-
-        if ($response->getStatusCode() > 299) {
-            throw new InvalidApiResponse($response);
+        try{
+            $response = $this->client->request($method, $url, $parameters);
+        } catch(ClientException $e) {
+            throw new InvalidApiResponse($e->getMessage(),$e->getRequest(), $e->getResponse());
         }
 
         return json_decode($response->getBody()->getContents(), true);

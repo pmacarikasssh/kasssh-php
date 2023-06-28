@@ -2,16 +2,9 @@
 
 namespace Kasssh\Payment\Exceptions;
 
-use Exception;
-use Psr\Http\Message\ResponseInterface;
+use GuzzleHttp\Exception\ClientException;
 
-class InvalidApiResponse extends Exception {
-    public $response;
+class InvalidApiResponse extends ClientException {
 
-    public function __construct(ResponseInterface $response)
-    {
-        $this->response = $response;
-        parent::__construct($response->getBody(), $response->getStatusCode());
-    }
 }
 
