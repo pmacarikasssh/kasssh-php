@@ -99,4 +99,9 @@ class KassshClient
         throw new \BadMethodCallException("Method $name not defined on " . static::class);
     }
 
+    public function getStoreId()
+    {
+        return $this->storeId;
+    }
+
 }
