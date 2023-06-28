@@ -7,7 +7,7 @@ The **KassshClient** package is a PHP client library for interacting with the Ka
 You can install the package via Composer. Run the following command:
 
 ```bash
-composer require pmacarikasssh/kasssh-php
+composer require kasssh/kasssh-payment
 ```
 
 ## Usage
